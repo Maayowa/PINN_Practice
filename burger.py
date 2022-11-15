@@ -17,6 +17,13 @@ from tqdm import tqdm
 
 sns.set_style("white")
 
+# Set Seed
+seed = 120
+import random
+#torch.random.seed(seed)
+np.random.seed(seed)
+random.seed(seed)
+torch.manual_seed(seed)
 
 # Create MLP for model training
 
@@ -82,7 +89,7 @@ class ModelNetwork:
         
         self.optimizer = torch.optim.LBFGS(
             self.model.parameters(),
-            lr = 0.1,
+            lr = 1.0,
             max_iter = 5e4,
             max_eval= 5e4,
             history_size=50,
@@ -104,7 +111,7 @@ class ModelNetwork:
         
         u = self.model(self.X)
         
-        du_dX = torch.autograd.grad(inputs =self.X, outputs = u,grad_outputs=  torch.ones_like(u),
+        du_dX = torch.autograd.grad(inputs =self.X, outputs = u, grad_outputs=  torch.ones_like(u),
                                     retain_graph=True, create_graph=True)[0]
         du_dt = du_dX[:, 1]
         du_dx = du_dX[:, 0]
@@ -124,7 +131,7 @@ class ModelNetwork:
     def train(self, epochs):
         for i in range(epochs):
             self.adam.step(self.loss_func)
-            self.optimizer.step(self.loss_func)
+        self.optimizer.step(self.loss_func)
             
             
 
