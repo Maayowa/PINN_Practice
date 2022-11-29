@@ -96,7 +96,7 @@ class ModelNetwork():
         self.optimizer_Adam = torch.optim.Adam(self.pinn.parameters())
         self.iter = 0
         
-    def net_uv(self, x, t):
+    def net_NS(self, x, t):
         X = torch.concat([x,t], 1)
         X = 2.0 * (X - self.lb) / (self.ub - self.lb) - 1.0
         uv = self.pinn(X)
@@ -155,7 +155,6 @@ class ModelNetwork():
         return loss
     
     def train(self, epochs):
-        
         for epoch in range(epochs):
             self.optimizer_Adam.step(self.loss_func)
         self.optimizer.step(self.loss_func)
